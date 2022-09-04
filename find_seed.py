@@ -6,7 +6,7 @@ import os
 import sys
 
 
-threshold = 13 # only seeds of runs under this many minutes
+threshold = 11 # only seeds of runs under this many minutes
 
 
 def get_time(run):
@@ -24,6 +24,9 @@ def get_time(run):
     millis = int(millis_match.group(0)) if millis_match is not None else 0
     return [hours, minutes, seconds, millis]
 
+def get_info(run):
+    weblink = run["run"]["weblink"]
+    return weblink
 
 def get_seed(run):
     comment = run["run"]["comment"]
@@ -42,8 +45,11 @@ def main():
     runs_filtered = list(filter(lambda run: get_time(run)[1] < threshold and get_time(run)[0] == 0, runs))
     rand_run = random.choice(runs_filtered)
     seed = get_seed(rand_run)
+    info = get_info(rand_run)
     with open("seed.txt", "w") as f:
         f.writelines(seed)
+    with open("info.txt", "w") as f:
+        f.writelines(info)
 
 
 if __name__ == "__main__":
